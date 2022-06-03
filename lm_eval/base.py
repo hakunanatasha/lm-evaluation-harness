@@ -717,7 +717,8 @@ class PromptSourceTask(Task):
             The results of the requests created in construct_requests.
         """
         answer_choices_list = self.prompt.get_answer_choices_list(doc)
-        target = self.doc_to_target(doc)
+        target = [self.doc_to_target(doc)]
+        #target = self.doc_to_target(doc)
         if answer_choices_list:
             # If answer_choices_list, then this is a ranked choice prompt.
             # NOTE: In the future, target could be a list of strings.
@@ -731,7 +732,8 @@ class PromptSourceTask(Task):
                 assert (
                     metric in self.CONFIGURED_RANKED_CHOICE_PS_METRICS
                 ), "Unexpected metric. Add it, or use a task-specific solution."
-                if metric == "Accuracy":
+                if metric == "Accuracy" or metric == "Other":  # NSEELAM
+                #if metric == "Accuracy":
                     out["acc"] = pred == target
             # TODO: Add metrics here.
         else:
@@ -741,6 +743,7 @@ class PromptSourceTask(Task):
             pred = results[0].strip()
             out = {}
             for metric in self.prompt.metadata.metrics:
+                print(metric)
                 assert (
                     metric in self.CONFIGURED_GENERATION_PS_METRICS
                 ), "Unexpected metric. Add it, or use a task-specific solution."
@@ -1052,7 +1055,8 @@ class BioTask(PromptSourceTask):
     *and* add additional custom processing, override `process_results`, `higher_is_better`, and `aggregation`.
     """
 
-    CONFIGURED_RANKED_CHOICE_PS_METRICS = set(["Accuracy"])
+    CONFIGURED_RANKED_CHOICE_PS_METRICS = set(["Accuracy", "Other", "Pearson Correlation"])  # NSEELAM
+    #CONFIGURED_RANKED_CHOICE_PS_METRICS = set(["Accuracy"])
     CONFIGURED_GENERATION_PS_METRICS = set(["BLEU", "ROUGE", "SARI"])
     SPLIT = None
 

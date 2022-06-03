@@ -729,12 +729,14 @@ class PromptSourceTask(Task):
             out = {}
 
             for metric in self.prompt.metadata.metrics:
-                assert (
-                    metric in self.CONFIGURED_RANKED_CHOICE_PS_METRICS
-                ), "Unexpected metric. Add it, or use a task-specific solution."
-                if metric == "Accuracy" or metric == "Other":  # NSEELAM
-                #if metric == "Accuracy":
+                #assert (
+                #    metric in self.CONFIGURED_RANKED_CHOICE_PS_METRICS
+                #), "Unexpected metric. Add it, or use a task-specific solution."
+                if metric == "Accuracy":
                     out["acc"] = pred == target
+                else:
+                    print("Metric not implemented.")
+                    pass
             # TODO: Add metrics here.
         else:
             # If not, then this is a generation prompt.
@@ -743,10 +745,9 @@ class PromptSourceTask(Task):
             pred = results[0].strip()
             out = {}
             for metric in self.prompt.metadata.metrics:
-                print(metric)
-                assert (
-                    metric in self.CONFIGURED_GENERATION_PS_METRICS
-                ), "Unexpected metric. Add it, or use a task-specific solution."
+                #assert (
+                #    metric in self.CONFIGURED_GENERATION_PS_METRICS
+                #), "Unexpected metric. Add it, or use a task-specific solution."
                 if metric == "BLEU":
                     out["bleu"] = (target, pred)
                 elif metric == "ROUGE":
@@ -760,6 +761,9 @@ class PromptSourceTask(Task):
                     out = {**out, **rouge_scores}
                 elif metric == "SARI":
                     out["sari"] = metrics.sari(self.doc_to_rawtext(doc), pred, target)
+                else:
+                    print("Metric not implemented")
+                    pass
 
         # TODO: Wrap process results s.t. override impl do not
         # override the save examples.

@@ -200,6 +200,12 @@ TASK_REGISTRY = {
     
     # SciTail
     "scitail": scitail.SciTailTE,
+
+    # GAD
+    "gad": gad.GadFold0Text,
+
+    # Biosses
+    "biosses": biosses.BiossesPairs
 }
 
 

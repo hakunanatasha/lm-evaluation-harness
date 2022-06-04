@@ -141,6 +141,9 @@ In cases where you may need to implement a custom metric, you will need to write
 
 **NOTE** If you are working with numerical information (I.e. correlation etc) make sure you have answer choices. If your answer choices are `null` in your prompt, you will go into the "generation" part of the code which may not be useful.
 
+Next, ensure your task has an output in `aggregation` from in `lm-evaluation-harness/lm_eval/base.py`.
+In `lm-evaluation-harness/lm_eval/evaluator.py`, the actual eval code is executed. Changes can be made around 265 to change your logic.
+
 # Running your Task
 
 If you implemented the above successfully, your command should run as follows

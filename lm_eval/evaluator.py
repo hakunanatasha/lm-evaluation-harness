@@ -248,6 +248,9 @@ def evaluate(
     vals = collections.defaultdict(list)
 
     # unpack results and sort back in order and return control to Task
+
+    all_examples = {"pred": [], "target": []}
+
     logger = logging.getLogger("examples")
     for (task_prompt_name, doc_id), per_doc_requests in process_res_queue.items():
         per_doc_requests.sort(key=lambda x: x[0])
@@ -259,6 +262,12 @@ def evaluate(
 
         output = task.process_results(doc, per_doc_results)
 
+        if "Pearson Correlation" in task.prompt.metadata.metrics:
+            i1 = float(output[1]["pred"])
+            i2 = float(output[1]["target"])
+            all_examples["pred"].append(i1)
+            all_examples["target"].append(i2)
+        
         if task.save_examples:
             metrics, example = output
             example.update(fewshot_logging_info)
@@ -273,6 +282,12 @@ def evaluate(
         for metric, value in metrics.items():
             vals[(task_prompt_name, metric)].append(value)
 
+    # After all examples computed, get R**2
+    if "Pearson Correlation" in task.prompt.metadata.metrics:
+        vals[(task_prompt_name, "Pearson Correlation")] = lm_eval.metrics.pearson_correlation(
+            all_examples["pred"], all_examples["target"]
+            )
+        
     # aggregate results
     metric_results = []
     for (task_prompt_name, metric), items in vals.items():

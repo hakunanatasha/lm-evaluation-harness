@@ -7,7 +7,10 @@ from rouge_score import rouge_scorer
 import sklearn.metrics
 import random
 from lm_eval.metric_impls import sari as sari_impl
+from scipy.stats import pearsonr
 
+def pearson_correlation(arr, target):
+    return pearsonr(arr, target)
 
 def mean(arr):
     return sum(arr) / len(arr)

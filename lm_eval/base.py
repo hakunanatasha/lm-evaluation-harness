@@ -717,7 +717,7 @@ class PromptSourceTask(Task):
             The results of the requests created in construct_requests.
         """
         answer_choices_list = self.prompt.get_answer_choices_list(doc)
-        target = [self.doc_to_target(doc)]  # NSEELAM convert o list
+        target = [self.doc_to_target(doc)]  # NSEELAM convert to list
         if answer_choices_list:
             # If answer_choices_list, then this is a ranked choice prompt.
             # NOTE: In the future, target could be a list of strings.
@@ -730,9 +730,13 @@ class PromptSourceTask(Task):
             for metric in self.prompt.metadata.metrics:
                 assert (
                     metric in self.CONFIGURED_RANKED_CHOICE_PS_METRICS
-                ), "Unexpected metric. Add it, or use a task-specific solution."
+                ), "Unexpected metric. Add it, or use a task-specific solution (RankedChoice)."
                 if metric == "Accuracy":
                     out["acc"] = pred == target
+                elif metric == "Pearson Correlation":
+                    pass
+                    #print(target)
+
             # TODO: Add metrics here.
         else:
             # If not, then this is a generation prompt.
@@ -743,7 +747,7 @@ class PromptSourceTask(Task):
             for metric in self.prompt.metadata.metrics:
                 assert (
                     metric in self.CONFIGURED_GENERATION_PS_METRICS
-                ), "Unexpected metric. Add it, or use a task-specific solution."
+                ), "Unexpected metric. Add it, or use a task-specific solution (Generation)."
                 if metric == "BLEU":
                     out["bleu"] = (target, pred)
                 elif metric == "ROUGE":
@@ -757,6 +761,7 @@ class PromptSourceTask(Task):
                     out = {**out, **rouge_scores}
                 elif metric == "SARI":
                     out["sari"] = metrics.sari(self.doc_to_rawtext(doc), pred, target)
+
 
         # TODO: Wrap process results s.t. override impl do not
         # override the save examples.
@@ -823,6 +828,8 @@ class PromptSourceTask(Task):
                 out["rougeLsum_fmeasure"] = mean
             elif metric == "SARI":
                 out["sari"] = mean
+            elif metric == "Pearson Correlation":
+                out["Pearson Correlation"] = mean
         return out
 
     def fewshot_examples(self, k, rnd):

@@ -28,6 +28,7 @@ from . import wmt
 from . import cnn_dailymail
 from . import diabla
 from . import gad
+from . import biosses
 
 ########################################
 # All tasks
@@ -214,7 +215,7 @@ TASK_REGISTRY = {
     "gad": gad.GadBlurbText,
 
     # Biosses
-
+    "biosses": biosses.BiossesPairs,
 
 }
 

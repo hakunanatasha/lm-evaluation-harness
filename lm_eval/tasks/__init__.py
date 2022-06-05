@@ -211,6 +211,9 @@ TASK_REGISTRY = {
     "gad7": gad.GadFold7Text,
     "gad8": gad.GadFold8Text,
     "gad9": gad.GadFold9Text,
+    "gadblurb": gad.GadBlurbText,
+
+    # Biosses
 
 
 }

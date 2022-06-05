@@ -22,7 +22,7 @@ _CITATION = """
 
 class GadBase(BioTask):
     VERSION = 0
-    DATASET_PATH = "/home/natasha/Projects/hfbiomed/blurb_datasets/gad"
+    DATASET_PATH = "/home/natasha/Projects/hfbiomed/full_prompting_pipeline/biomedical/bigbio/biodatasets/gad"
     DATASET_NAME = None
     SPLIT = None
 
@@ -47,6 +47,9 @@ class GadBase(BioTask):
         if self.has_test_docs():
             return self.dataset["test"]
 
+class GadBlurbText(GadBase):
+    """BLURB split from GAD, based on fold1"""
+    DATASET_NAME = "gad_blurb_bigbio_text"
 
 class GadFold0Text(GadBase):
     DATASET_NAME = "gad_fold0_bigbio_text"

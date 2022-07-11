@@ -717,7 +717,7 @@ class PromptSourceTask(Task):
             The results of the requests created in construct_requests.
         """
         answer_choices_list = self.prompt.get_answer_choices_list(doc)
-        target = self.doc_to_target(doc)
+        target = [self.doc_to_target(doc)]
         if answer_choices_list:
             # If answer_choices_list, then this is a ranked choice prompt.
             # NOTE: In the future, target could be a list of strings.

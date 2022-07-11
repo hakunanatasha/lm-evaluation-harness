@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "task_name": "custom_dataset",
+      "prompt_name": "Yes/No Entailment Framing",
+      "acc": 0.0,
+      "dataset_path": "/home/natasha/Tutorials/biomedical/bigbio/biodatasets/custom_dataset",
+      "dataset_name": "custom_bigbio_pairs",
+      "subset": null,
+      "acc_stderr": 0.0
+    }
+  ],
+  "config": {
+    "model": "hf-seq2seq",
+    "model_args": "pretrained=t5-small",
+    "num_fewshot": 0,
+    "batch_size": null,
+    "device": "cuda",
+    "no_cache": false,
+    "limit": null,
+    "bootstrap_iters": 100000,
+    "description_dict": {}
+  }
+}

@@ -14,6 +14,7 @@ from . import flores_101
 from . import gem_asset_turk
 from . import gem_mlsum
 from . import gem_webnlg
+from . import gem_wikilingua
 from . import gem_xsum
 from . import glue
 from . import hans
@@ -21,12 +22,22 @@ from . import huff_post
 from . import lama
 from . import lince
 from . import race
+
 from . import scitail
+from . import bioasq_task_b
+from . import biosses
+from . import gad
+from . import mednli
+
 from . import superglue
 from . import wino_bias
 from . import wmt
+from . import crd3
 from . import cnn_dailymail
 from . import diabla
+from . import xquad
+from . import schema_guided_dstc8
+from . import piaf
 
 
 ########################################
@@ -62,7 +73,10 @@ TASK_REGISTRY = {
     **gem_webnlg.construct_tasks(),
     # multilingual lambada
     **gem_asset_turk.construct_tasks(),
+    # GEM WikiLingua
+    **gem_wikilingua.construct_tasks(),
     "e2e_nlg_cleaned": e2e_nlg_cleaned.E2E_NLG_Cleaned,
+    "schema_guided_dstc8": schema_guided_dstc8.Schema_Guided_DSTC8,
     # formatted as gsarti/flores_101_[LANG]
     **flores_101.construct_tasks(),
     "lama_trex": lama.Trex,
@@ -190,15 +204,26 @@ TASK_REGISTRY = {
     
     # Code-switching
     "lince_sa": lince.LinCESentimentAnalysis,
-    
+    # CRD3
+    "crd3": crd3.CRD3,
     # WMT
     **wmt.create_year_tasks(wmt.WMT14_TASKS),
     
     # DiaBLa
     "diabla": diabla.DiaBLa,
+    # XQuAD
+    "xquad_en": xquad.XQuADEnglish,
+    "xquad_ar": xquad.XQuADArabic,
+
+    # piaf
+    "piaf": piaf.PIAF,
     
-    # SciTail
+    # BigBio
     "scitail": scitail.SciTailTE,
+    "bioasq_task_b": bioasq_task_b.BioAsqQA,
+    "biosses": biosses.BiossesPAIRS,
+    "gad": gad.GadTEXT,
+    "mednli": mednli.MedNliTE,
 }
 
 
@@ -258,7 +283,8 @@ def get_task_dict_promptsource(task_name_list: List[str]):
                 if static_task_obj.DATASET_NAME
                 else ""
             )
-            ps_task_name = "scitail/scitail_bigbio_te"
+            ps_task_name = static_task_obj.DATASET_PATH.split("/")[-1] + "/"
+            ps_task_name += static_task_obj.DATASET_NAME
 
             task_prompts = DatasetTemplates(ps_task_name)
             for prompt_name in task_prompts.all_template_names:
